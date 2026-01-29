@@ -1,0 +1,177 @@
+/* Whole document: */
+body{
+  font-family: Courier New;
+  font-size: 13pt;
+  color: black;
+  background-color: #f9f8fe;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+
+/* Content of the markdown is not main-container but is toc-content */
+.toc-content {
+  margin-left: -15px;
+  padding-left: 0px;
+}
+
+
+
+/* Headers */
+
+h1.title {color: white;
+  font-size: 16pt;
+  background-color: #785ef0;
+  padding-top: 1em;
+  padding-bottom: .2em;
+  padding-right: .2em;
+  text-align: center;
+  /* max-width: 750px; */
+  /* border-left: 15px solid #black; */
+}
+
+h1, .h1, h2, .h2, h3, .h3 {
+  color: white;
+  margin-top: 15px;
+  padding-bottom: .25em;
+  padding-left: .5em;
+  padding-top: .25em;
+}
+
+
+h1 {
+  font-size: 15pt;
+  padding-top:.5em;
+  color: 	 white;
+  background-color: #648fff;
+}
+
+
+h2 { 
+  font-size: 15pt;
+  padding-top:.5em;
+  color: white;  
+  background-color: #dc2680;
+}
+
+
+h3 { 
+  font-size: 15pt;
+   color: white;
+   background-color:  #fe6202;
+}
+
+/* Code Chunks */
+pre {
+  max-height: 350px;
+  background-color: white;
+  overflow-y: auto;
+}
+
+pre[class] {
+  max-height: 350px;
+}
+
+.r code {
+    white-space: pre;
+}
+
+pre code {
+  white-space: pre-wrap;
+}
+
+
+/* LINKS */
+
+/* unvisited link */
+a:link {
+  color: #374AD5;
+  text-decoration: none;
+}
+
+
+/* visited link */
+a:visited {
+  color: #4B0082;
+  text-decoration: none;
+}
+
+/* mouse over link */
+a:hover { 
+  color: #4B0082;
+  background-color: #f9f8fe;
+  text-decoration: none;
+}
+
+/* TOC */
+
+/*----------LOGO above TOC in empty box---------*/
+#TOC::before {
+  content: "";
+  display: block;
+  top: 0px;
+  height: 200px;
+  width: 200px;
+  margin-top: 20px; /* Adds space below the logo */
+  margin-bottom: 20px; /* Adds space below the logo */
+  background-image: url("nova.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+
+/*----------Actual TOC Container---------*/
+div#TOC {
+  font-size: 10pt;
+  border: #f9f8fe;
+  background: #f9f8fe;
+  padding-right: 2px;  /* Fixed typo (was missing 'px') */
+  padding-left: 2px;
+  width: 30%;  /* Reduces width by 10% (from original 100%) */
+  max-width: fit-content; 
+  white-space: nowrap; /* Prevents text from wrapping */
+}
+
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul ul {
+  list-style-type: none;
+  margin-left: 20;
+}
+
+.list-group-item.active:hover {
+    z-index: 1;
+    color: #f9f8fe;
+    background-color: #8b3508;
+    border-color: #8b3508;
+}
+
+.list-group-item.active:hover {
+    z-index: 2;
+    color: #f9f8fe;
+    background-color: #8b3508;
+    border-color: #8b3508;
+}
+
+
+.list-group-item.active {
+    z-index: 1;
+    color: #f9f8fe;
+    text-decoration: none;
+    background-color: #8b3508;
+    border-color: #8b3508;
+}
+
+.list-group-item.active {
+    z-index: 2;
+    color: #f9f8fe;
+    text-decoration: none;
+    background-color: #fe6100;
+    border-color: #fe6100;
+    }
