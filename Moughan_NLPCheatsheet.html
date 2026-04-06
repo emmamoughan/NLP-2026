@@ -1623,7 +1623,7 @@ border-radius: 0px;
 
 <h1 class="title toc-ignore">NLP Cheatsheet</h1>
 <h4 class="author">Emma Moughan</h4>
-<h4 class="date">02-11-2026</h4>
+<h4 class="date">04-06-2026</h4>
 
 </div>
 
@@ -1635,40 +1635,47 @@ them after submission! Just to make everyone’s life easier.</p>
 <div id="data-needed" class="section level2">
 <h2>Data Needed</h2>
 <pre class="r"><code># contractions data
-load(file = &quot;data/replacements_25.rda&quot;)</code></pre>
+load(file = &quot;data/replacements_25.rda&quot;)
+
+### dataframe needed for some additions:
+names_df &lt;- data.frame(id = c(1, 2, 3), name = c(&quot;emma&quot;, &quot;isabel&quot;, &quot;melanie&quot;))</code></pre>
 </div>
-</div>
-<div id="class-211" class="section level1">
-<h1>Class 2/11</h1>
-<p>-add a column/delete a column -mutate syntax -dataframe/tibble -wide
-to long/long to wide -handling NAs vs. white space -syntax for ggplot
--loading from github</p>
 </div>
 <div id="new-additions" class="section level1">
 <h1>New Additions</h1>
-<pre class="r"><code>## ADD A DATAFRAME TO MESS WITH
-
-# addition 1: loading from github
-load(url(&quot;https://github.com/Reilly-ConceptsCognitionLab/reillylab_publicdata/blob/main/Temple_stops25.rda?raw=true&quot;))  # load followed by URL
-
-### dataframe needed for additions 2-4:
-df &lt;- data.frame(id = c(1, 2, 3), name = c(&quot;emma&quot;, &quot;isabel&quot;, &quot;melanie&quot;))
-
-# addition 2: add a column using Base R
-df$lab &lt;- &quot;SAN Lab&quot;
-
-# addition 3: add a column using tidyverse/mutate syntax
-df &lt;- df |&gt;
-    mutate(lab = &quot;SAN Lab&quot;)
-
-# addition 4: collapse text into one row under one column
-df_sub &lt;- df |&gt;
-    summarise(name = paste(name, collapse = &quot; &quot;))
-
-# addition 5: readtext vs. readLines
-mobydick &lt;- readtext(&quot;http://www.gutenberg.org/cache/epub/2701/pg2701.txt&quot;)  # returns a DATAFRAME, multiple file types are compatible
-
-unabomb &lt;- paste(readLines(&quot;https://raw.githubusercontent.com/Reilly-ConceptsCognitionLab/reillylab_publicdata/main/unabomber_manifesto.txt&quot;))  # returns a CHARACTER VECTOR, typically only works with .txt files</code></pre>
+<div id="lda-based-topic-modeling" class="section level2">
+<h2>LDA-based topic modeling</h2>
+<p><em>all additions are LDA. code is commented out so that the document
+will knit</em></p>
+<ol style="list-style-type: decimal">
+<li><p>running the actual LDA model; k is the number of topics (need to
+hard code it, other packages can provide a range, but LDA needs k to be
+specifically set); alpha controls how spread out the topics per document
+are (low = sparser, potentially 1 or 2 topics per document; example, if
+we fed Moby Dick through with an alpha = 0.1, it would most likely JUST
+spit out “whales”)<br />
+1a. LDA = Latent Dirichlet Allocation<br />
+<strong>ACTUAL CODE: LDA_model &lt;- LDA(corpus/dataframe, method =
+“Gibbs”, k = 5, control = list(alpha = 0.1))</strong></p></li>
+<li><p>setting the topic number<br />
+<strong>ACTUAL CODE: topic = 5</strong></p></li>
+<li><p>posterior distribution (probability of something given new
+information; introducing a base rate to inform a decision; update
+knowledge/predictions on likelihoods) to see what the actual value of
+the words is<br />
+3a. each row is a topic<br />
+<strong>ACTUAL CODE: row_topic &lt;-
+topicmodels::posterior(LDA_model)$terms[topic, ]</strong></p></li>
+<li><p>posterior matrix for the inverse of above<br />
+4a. rows are documents and columns are topics<br />
+<strong>ACTUAL CODE: row_doc &lt;-
+topicmodels::posterior(LDA_model)$topics[, topic]</strong></p></li>
+<li><p>metadata; match rows from the document term matrix to the doc
+names from document feature matrix so that each row matches<br />
+<strong>ACTUAL CODE: docs &lt;- docvars(dfm)[match(rownames(dtm),
+docnames(dfm)),]</strong></p></li>
+</ol>
+</div>
 </div>
 <div id="notes" class="section level1">
 <h1>Notes</h1>
@@ -1697,6 +1704,8 @@ text_df &lt;- &quot;Mary  a little lamb&quot;
 x &lt;- text_df[text_df != &quot;&quot;]  # logical vector to subset text_df; will only keep elements that correspond to true
 print(x)</code></pre>
 <pre><code>## [1] &quot;Mary  a little lamb&quot;</code></pre>
+<pre class="r"><code># add a column using Base R
+names_df$lab &lt;- &quot;SAN Lab&quot;</code></pre>
 </div>
 <div id="datatext-cleaning" class="section level1">
 <h1>Data/Text Cleaning</h1>
@@ -1728,6 +1737,20 @@ text_df &lt;- &quot;Mary had a little lamb, and she was running&quot;
 x &lt;- textstem::lemmatize_strings(text_df)
 print(x)</code></pre>
 <pre><code>## [1] &quot;Mary have a little lamb, and she be run&quot;</code></pre>
+<pre class="r"><code># add a column using tidyverse/mutate syntax
+names_df &lt;- names_df |&gt;
+    mutate(lab = &quot;SAN Lab&quot;)
+
+# collapse text into one row under one column
+names_sub &lt;- names_df |&gt;
+    summarise(name = paste(name, collapse = &quot; &quot;))
+
+# loading from github
+load(url(&quot;https://github.com/Reilly-ConceptsCognitionLab/reillylab_publicdata/blob/main/Temple_stops25.rda?raw=true&quot;))  # load followed by URL
+
+# readtext vs. readLines
+mobydick &lt;- readtext(&quot;http://www.gutenberg.org/cache/epub/2701/pg2701.txt&quot;)  # returns a DATAFRAME, multiple file types are compatible
+unabomb &lt;- paste(readLines(&quot;https://raw.githubusercontent.com/Reilly-ConceptsCognitionLab/reillylab_publicdata/main/unabomber_manifesto.txt&quot;))  # returns a CHARACTER VECTOR, typically only works with .txt files</code></pre>
 </div>
 <div id="building-functions" class="section level1">
 <h1>Building Functions</h1>
@@ -1777,6 +1800,9 @@ x &lt;- replace_stops(text_df, Temple_stops25)
 print(x)</code></pre>
 <pre><code>## [1] &quot;Mary     little lamb,       listen&quot;</code></pre>
 </div>
+<div id="topic-modeling" class="section level1">
+<h1>Topic Modeling</h1>
+</div>
 <div id="packages" class="section level1">
 <h1>Packages</h1>
 <pre class="r"><code># xfun to attach all packages needed automatically
@@ -1810,6 +1836,8 @@ and replace</p></li>
 <li><p>if you’re isolating numbers and telling R to replace digits, it
 can be changed into a character vector and, thus, digits are no longer
 digits.</p></li>
+<li><p>#?&lt;=sub- is a positive look behind; matches the position
+behind “sub-” but doesn’t match it</p></li>
 </ul>
 </div>
 
